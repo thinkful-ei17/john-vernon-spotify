@@ -34,7 +34,7 @@ const getArtist = function (name) {
     artist = data.artists.items[0];
     let id = data.artists.items[0].id;
     console.log(id);
-      //ask for more data 
+      //ask for more data
     return getFromApi(`artists/${id}/related-artists`);
   }).then((data) => {
     artist.related = data.artists
@@ -56,13 +56,6 @@ const getArtist = function (name) {
   // (Plan to call `getFromApi()` several times over the whole exercise from here!)
 };
 
-const createTemplate = function (data) {
-
-}
-
-const renderHTML = function (template) {
-
-}
 //testing logs
 //#1
 // getFromApi('search', {
