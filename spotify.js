@@ -40,13 +40,9 @@ const getArtist = function (name) {
     artist.related = data.artists
 
     //get ids for each related artist
-    //make url, return url into urlArr[index]
-    let urlArr = data.artists.map((item) => {
-      return `artists/${item.id}/top-tracks`;
-    });
+    //make url, give correct url to getFromAPI func
+    return Promise.all(data.artists.map((item) => getFromApi(`artists/${item.id}/top-tracks` , {'country': 'US'})));
 
-    return Promise.all(urlArr.map((url) => getFromApi(url , {'country': 'US'})));
-    // return artist;
   }).then((data) => {
 
     for (x in artist.related){
