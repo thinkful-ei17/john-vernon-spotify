@@ -38,72 +38,26 @@ const getArtist = function (name) {
     return getFromApi(`artists/${id}/related-artists`);
   }).then((data) => {
     artist.related = data.artists
+
+    //get ids for each related artist
+    //make url, return url into urlArr[index]
+    let urlArr = data.artists.map((item) => {
+      return `artists/${item.id}/top-tracks`;
+    });
+
+    return Promise.all(urlArr.map((url) => getFromApi(url , {'country': 'US'})));
+    // return artist;
+  }).then((data) => {
+
+    for (x in artist.related){
+        artist.related[x].tracks = data[x].tracks;
+    }
+
     return artist;
   })
-//   return getFromApi(`artists/${id}/related-artists`);
 
-// }).then((data) => {
-
-//   console.log("Second Data: ");
-//   console.log(data);
-
-  // return getFromApi('search', {
-  //   q:name,
-  //   limit:1,
-  //   type: 'artist'
-  // });
-  // Edit me!
-  // (Plan to call `getFromApi()` several times over the whole exercise from here!)
 };
 
-//testing logs
-//#1
-// getFromApi('search', {
-//   q: "Drake",
-//    limit: 1,
-//    type: 'artist'
-// }).then((data) => console.log(data));
-
-// //#2 error
-// getFromApi('search', {
-//   q: "Drake",
-//    limit: -1,
-//    type: 'artist'
-// }).then((data) => console.log(data)
-// ).catch((err) => console.log(err));
-
-//#3 additional request
-getFromApi('search', {
-
-  q: "James Blake",
-   limit: 1,
-   type: 'artist'
-
-}).then((data) => {
-
-  console.log(data)
-  /*
-  only one item and obj layout looks like
-  data
-  - artists
-  -- items
-  --- [0]
-  ---- id
-  ---- name ,etc, etc
-  --- [0] to [limit]
-  -- etc
-  */
-  let id = data.artists.items[0].id;
-  console.log(id);
-  //ask for more data
-  return getFromApi(`artists/${id}/related-artists`);
-
-}).then((data) => {
-
-  console.log("Second Data: ");
-  console.log(data);
-
-});
 
 //#4
 
