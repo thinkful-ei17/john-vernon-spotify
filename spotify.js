@@ -25,6 +25,33 @@ const getFromApi = function (endpoint, query = {}) {
 let artist;
 
 const getArtist = function (name) {
+  console.log("hi");
+  return getFromApi('search', {
+    q: name,
+     limit: 1,
+     type: 'artist'
+  }).then((data) => {
+    artist = data.artists.items[0];
+    let id = data.artists.items[0].id;
+    console.log(id);
+      //ask for more data 
+    return getFromApi(`artists/${id}/related-artists`);
+  }).then((data) => {
+    artist.related = data.artists
+    return artist;
+  })
+//   return getFromApi(`artists/${id}/related-artists`);
+
+// }).then((data) => {
+
+//   console.log("Second Data: ");
+//   console.log(data);
+
+  // return getFromApi('search', {
+  //   q:name,
+  //   limit:1,
+  //   type: 'artist'
+  // });
   // Edit me!
   // (Plan to call `getFromApi()` several times over the whole exercise from here!)
 };
@@ -38,19 +65,19 @@ const renderHTML = function (template) {
 }
 //testing logs
 //#1
-getFromApi('search', {
-  q: "Drake",
-   limit: 1,
-   type: 'artist'
-}).then((data) => console.log(data));
+// getFromApi('search', {
+//   q: "Drake",
+//    limit: 1,
+//    type: 'artist'
+// }).then((data) => console.log(data));
 
-//#2 error
-getFromApi('search', {
-  q: "Drake",
-   limit: -1,
-   type: 'artist'
-}).then((data) => console.log(data)
-).catch((err) => console.log(err));
+// //#2 error
+// getFromApi('search', {
+//   q: "Drake",
+//    limit: -1,
+//    type: 'artist'
+// }).then((data) => console.log(data)
+// ).catch((err) => console.log(err));
 
 //#3 additional request
 getFromApi('search', {
