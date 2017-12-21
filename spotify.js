@@ -62,15 +62,17 @@ getFromApi('search', {
 }).then((data) => {
 
   console.log(data)
-  //only one item and obj layout looks like
-  //data
-  //- artists
-  //-- items
-  //--- [0]
-  //---- id
-  //---- name ,etc, etc
-  //--- [0] to [limit]
-  //-- etc
+  /*
+  only one item and obj layout looks like
+  data
+  - artists
+  -- items
+  --- [0]
+  ---- id
+  ---- name ,etc, etc
+  --- [0] to [limit]
+  -- etc
+  */
   let id = data.artists.items[0].id;
   console.log(id);
   //ask for more data
@@ -83,6 +85,36 @@ getFromApi('search', {
 
 });
 
+//#4
+
+getFromApi('search', {
+
+  q: "James Blake",
+   limit: 1,
+   type: 'artist'
+
+}).then((data) => {
+
+  let id = data.artists.items[0].id;
+  return getFromApi(`artists/${id}/related-artists`);
+
+}).then((data) => {
+
+  console.log(data.artists);
+  //return getFromApi("artists/43ZHCT0cAZBISjO8DG9PnE/top-tracks?country=US");
+  //return getFromApi(`artists/${data.artists[0].id}/top-tracks?country=US`);
+
+  let urlArr = data.artists.map((item) => {
+    return `artists/${item.id}/top-tracks?country=US`;
+  });
+
+  console.log(urlArr);
+
+  return Promise.all(urlArr.map((url) => getFromApi(url)));
+}).then((data) => {
+  console.log("Last one");
+  console.log(data)
+});
 // =========================================================================================================
 // IGNORE BELOW THIS LINE - THIS IS RELATED TO SPOTIFY AUTHENTICATION AND IS NOT NECESSARY
 // TO REVIEW FOR THIS EXERCISE
