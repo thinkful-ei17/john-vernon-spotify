@@ -58,31 +58,6 @@ const getArtist = function (name) {
 
 };
 
-
-//#4
-
-getFromApi('search', {
-
-  q: "James Blake",
-   limit: 1,
-   type: 'artist'
-
-}).then((data) => {
-
-  let id = data.artists.items[0].id;
-  return getFromApi(`artists/${id}/related-artists`);
-
-}).then((data) => {
-
-  console.log(data.artists);
-  //return getFromApi("artists/43ZHCT0cAZBISjO8DG9PnE/top-tracks?country=US");
-  //return getFromApi(`artists/${data.artists[0].id}/top-tracks?country=US`);
-  //create 20 unique urls for each related artist
-  // i know data.artists contains 20 objs, in those objs it has a key called id.
-  let urlArr = data.artists.map((item) => {
-    return `artists/${item.id}/top-tracks`;
-  });
-
   console.log(urlArr);
 
   return Promise.all(urlArr.map((url) => getFromApi(url , {'country': 'US'})));
