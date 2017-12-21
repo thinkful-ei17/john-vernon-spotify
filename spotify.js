@@ -1,8 +1,8 @@
 const CLIENT_ID = 'eb6dfffda5534bb5996e872487be4321';
 
 const getFromApi = function (endpoint, query = {}) {
-  // You won't need to change anything in this function, but you will use this function 
-  // to make calls to Spotify's different API endpoints. Pay close attention to this 
+  // You won't need to change anything in this function, but you will use this function
+  // to make calls to Spotify's different API endpoints. Pay close attention to this
   // function's two parameters.
 
   const url = new URL(`https://api.spotify.com/v1/${endpoint}`);
@@ -29,12 +29,62 @@ const getArtist = function (name) {
   // (Plan to call `getFromApi()` several times over the whole exercise from here!)
 };
 
+const createTemplate = function (data) {
 
+}
 
+const renderHTML = function (template) {
 
+}
+//testing logs
+//#1
+getFromApi('search', {
+  q: "Drake",
+   limit: 1,
+   type: 'artist'
+}).then((data) => console.log(data));
+
+//#2 error
+getFromApi('search', {
+  q: "Drake",
+   limit: -1,
+   type: 'artist'
+}).then((data) => console.log(data)
+).catch((err) => console.log(err));
+
+//#3 additional request
+getFromApi('search', {
+
+  q: "James Blake",
+   limit: 1,
+   type: 'artist'
+
+}).then((data) => {
+
+  console.log(data)
+  //only one item and obj layout looks like
+  //data
+  //- artists
+  //-- items
+  //--- [0]
+  //---- id
+  //---- name ,etc, etc
+  //--- [0] to [limit]
+  //-- etc
+  let id = data.artists.items[0].id;
+  console.log(id);
+  //ask for more data
+  return getFromApi(`artists/${id}/related-artists`);
+
+}).then((data) => {
+
+  console.log("Second Data: ");
+  console.log(data);
+
+});
 
 // =========================================================================================================
-// IGNORE BELOW THIS LINE - THIS IS RELATED TO SPOTIFY AUTHENTICATION AND IS NOT NECESSARY  
+// IGNORE BELOW THIS LINE - THIS IS RELATED TO SPOTIFY AUTHENTICATION AND IS NOT NECESSARY
 // TO REVIEW FOR THIS EXERCISE
 // =========================================================================================================
 const login = function () {
